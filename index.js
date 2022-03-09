@@ -1,2 +1,10 @@
-console.log('confirm script is loaded into index.html')
-console.log('confirm D3 methods are available', d3)
+document.addEventListener("DOMContentLoaded", async () => {
+    const response = await fetch("https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json")
+    if (!response.ok) {
+        const errorMessage = `An error has occured: ${response.status}`
+        throw new Error(errorMessage)
+    }
+    const data = await response.json()
+    const videoGameConsoles = data?.children
+    console.log('videoGameConsoles', videoGameConsoles)
+})
