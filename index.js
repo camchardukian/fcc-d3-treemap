@@ -5,6 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         throw new Error(errorMessage)
     }
     const data = await response.json()
-    const videoGameConsoles = data?.children
-    console.log('videoGameConsoles', videoGameConsoles)
+    const videoGamesData = data?.children
+    console.log('videoGamesData', videoGamesData)
 })
