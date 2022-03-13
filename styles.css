@@ -4,3 +4,7 @@ body {
 #title {
   margin-bottom: 8px;
 }
+
+svg {
+  border: 2px solid salmon;
+}
