@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const errorMessage = `An error has occured: ${response.status}`
         throw new Error(errorMessage)
     }
-    const data = await response.json()
+    const data = await response.json();
+    const valuesArray = data.children.map((platform) => platform.children.map((game) => Number(game.value))).flat()
 
     const width = 1200;
     const height = 1200;
@@ -15,30 +16,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         .attr("width", width)
         .attr("height", height);
 
-    // @TODO -- fix the fill colors of treemap
-
     const root = d3.hierarchy(data).sum(function (d) { return d.value }) // Here the size of each leave is given in the 'value' field in input data
-
     // Then d3.treemap computes the position of each element of the hierarchy
     d3.treemap()
         .size([width, height])
+        // padding between each rectangle
         .paddingTop(8)
         .paddingRight(4)
         .paddingInner(2)
-        // Padding between each rectangle
-        // .paddingOuter(6)
-        // .padding(20)
         (root)
 
     // prepare a color scale
     const color = d3.scaleOrdinal()
-        .domain(["Wii"])
-        .range(["pink"])
+        .domain(["Wii", "DS", "X360", "GB", "PS3",
+            "NES", "PS2", "3DS", "PS4", "SNES", "PS",
+            "N64", "GBA", "XB", "PC", "2600", "PSP", "XOne"])
+        .range(["green", "blue", "deeppink", "purple", "orange",
+            "tomato", "aqua", "beige", "brown", "crimson", "cyan",
+            "gold", "greenyellow", "violet", "navy", "sienna", "silver", "yellow"])
 
-    // And a opacity scale
+    // Opacity scale which darkens items with higher values and lightens items with lower values.
     const opacity = d3.scaleLinear()
-        .domain([10, 30])
-        .range([.5, 1])
+        .domain([d3.min(valuesArray), d3.max(valuesArray) / 2])
+        .range([.2, .7])
 
     // use this information to add rectangles:
     svg
@@ -51,9 +51,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         .attr('width', function (d) { return d.x1 - d.x0; })
         .attr('height', function (d) { return d.y1 - d.y0; })
         .style("stroke", "black")
-        .style("fill", function (d) { return color(d.parent.data.category) })
+        .style("fill", function (d) {
+            return color(d.parent.data.name)
+        })
         .style("opacity", function (d) {
-            console.log('d', d.data)
             return opacity(d.data.value)
         })
 
@@ -79,5 +80,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         .attr("y", function (d) { return d.y0 + 35 })    // +20 to adjust position (lower)
         .text(function (d) { return d.data.value })
         .attr("font-size", "11px")
-        .attr("fill", "gray")
+        .attr("fill", "black")
 })
