@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         .attr("width", width)
         .attr("height", height);
 
-    const root = d3.hierarchy(data).sum(function (d) { return d.value }) // Here the size of each leave is given in the 'value' field in input data
+    const root = d3.hierarchy(data).sum((d) => d.value)
+    // Here the size of each leave is given in the 'value' field in input data
     // Then d3.treemap computes the position of each element of the hierarchy
     d3.treemap()
         .size([width, height])
@@ -40,45 +41,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         .domain([d3.min(valuesArray), d3.max(valuesArray) / 2])
         .range([.2, .7])
 
-    // use this information to add rectangles:
+    // Add rectangles
     svg
         .selectAll("rect")
         .data(root.leaves())
         .join("rect")
         .attr("class", "tile")
-        .attr('x', function (d) { return d.x0; })
-        .attr('y', function (d) { return d.y0; })
-        .attr('width', function (d) { return d.x1 - d.x0; })
-        .attr('height', function (d) { return d.y1 - d.y0; })
+        .attr("data-category", (d) => d.data.category)
+        .attr("data-name", (d) => d.data.name)
+        .attr("data-value", (d) => d.data.value)
+        .attr('x', (d) => d.x0)
+        .attr('y', (d) => d.y0)
+        .attr('width', (d) => d.x1 - d.x0)
+        .attr('height', (d) => d.y1 - d.y0)
         .style("stroke", "black")
-        .style("fill", function (d) {
-            return color(d.parent.data.name)
-        })
-        .style("opacity", function (d) {
-            return opacity(d.data.value)
-        })
+        .style("fill", (d) => color(d.parent.data.name))
+        .style("opacity", (d) => opacity(d.data.value))
 
-    // and to add the text labels
+    // add game name text label
     svg
         .selectAll("text")
         .data(root.leaves())
         .enter()
         .append("text")
-        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
-        .attr("y", function (d) { return d.y0 + 20 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.name })
+        .attr("x", (d) => d.x0 + 5) // +10 to adjust position (more right)
+        .attr("y", (d) => d.y0 + 20) // +20 to adjust position (lower)
+        .text((d) => d.data.name)
         .attr("font-size", "8px")
         .attr("fill", "black")
 
-    // and to add the text labels
+    // add value text label
     svg
         .selectAll("vals")
         .data(root.leaves())
         .enter()
         .append("text")
-        .attr("x", function (d) { return d.x0 + 5 })    // +10 to adjust position (more right)
-        .attr("y", function (d) { return d.y0 + 35 })    // +20 to adjust position (lower)
-        .text(function (d) { return d.data.value })
+        .attr("x", (d) => d.x0 + 5)    // +10 to adjust position (more right)
+        .attr("y", (d) => d.y0 + 35)    // +20 to adjust position (lower)
+        .text((d) => d.data.value)
         .attr("font-size", "11px")
         .attr("fill", "black")
 })
