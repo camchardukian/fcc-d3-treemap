@@ -41,7 +41,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         .domain([d3.min(valuesArray), d3.max(valuesArray) / 2])
         .range([.2, .7])
 
-    // Add rectangles
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("id", "tooltip")
+        .style("visibility", "hidden")
+
+    // Add rectangles + tooltip
     svg
         .selectAll("rect")
         .data(root.leaves())
@@ -57,6 +62,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         .style("stroke", "black")
         .style("fill", (d) => color(d.parent.data.name))
         .style("opacity", (d) => opacity(d.data.value))
+        .on("mousemove", (e) => {
+            const itemData = e.target?.__data__
+            const { name, category, value } = itemData.data
+            tooltip
+                .style('top', `${e.pageY - 25}px`)
+                .style('left', `${e.pageX + 10}px`)
+                .transition()
+                .style("visibility", "visible")
+                .text(`Game Title: ${name}
+                Platform: ${category}
+                Popularity Value: ${value}
+                `)
+                .attr("data-value", value);
+        })
+        .on("mouseout", () => tooltip.transition().style("visibility", "hidden"));
 
     // add game name text label
     svg
@@ -81,4 +101,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         .text((d) => d.data.value)
         .attr("font-size", "11px")
         .attr("fill", "black")
+
 })
