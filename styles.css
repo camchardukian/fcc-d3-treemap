@@ -1,8 +1,17 @@
 body {
   text-align: center;
 }
+
 #title {
   margin-bottom: 8px;
+}
+
+#tooltip {
+  min-width: 100px;
+  background-color: lightblue;
+  padding: 4px 8px;
+  position: absolute;
+  white-space: pre-line;
 }
 
 svg {
