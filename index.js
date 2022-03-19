@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .domain(videoGamePlatforms)
         .range(colorsArray);
 
-    // Add one dot in the legend for each name.
+    // Add one rectangle in the legend for each video game platform.
     const size = 32
     legend.selectAll("mydots")
         .data(videoGamePlatforms)
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .attr("height", size)
         .style("fill", (d) => legendColors(d))
 
-    // Add one label in the legend for each name.
+    // Add one label in the legend for each video game platform.
     legend.selectAll("mylabels")
         .data(videoGamePlatforms)
         .enter()
