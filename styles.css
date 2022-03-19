@@ -13,7 +13,3 @@ body {
   position: absolute;
   white-space: pre-line;
 }
-
-svg {
-  border: 2px solid salmon;
-}
